@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="mainBody">
+
+<div class="app-container">
+    <header>
+        <div>
+            <h1 style="margin:0; font-size: 1.5rem;">Finance<span style="color:var(--primary)">Dashboard</span></h1>
+            <p id="insight-summary" style="margin:0; font-size:0.8rem; color:var(--text-muted)">Welcome! Add entries to begin.</p>
+        </div>
+        <div style="display:flex; gap:10px">
+            <select id="role" onchange="stateManager.updateRole(this.value)">
+                <option value="admin">Admin Access</option>
+                <option value="viewer">Viewer Mode</option>
+            </select>
+            <button class="secondary" onclick="toggleDark()">🌓</button>
+            <button onclick="exportData()">Export</button>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <div class="card stat-card">
+            <div class="stat-label">Net Balance</div>
+            <div class="stat-val" id="balanceDisplay">₹0</div>
+        </div>
+        <div class="card stat-card">
+            <div class="stat-label">Total Income</div>
+            <div class="stat-val" id="incomeDisplay" style="color:var(--success)">₹0</div>
+        </div>
+        <div class="card stat-card">
+            <div class="stat-label">Total Expense</div>
+            <div class="stat-val" id="expenseDisplay" style="color:var(--danger)">₹0</div>
+        </div>
+    </div>
+
+    <div class="card" id="adminForm" style="margin-bottom:1.5rem">
+        <h3 style="margin-top:0">Manage Transaction</h3>
+        <div class="form-grid">
+            <div class="flex-col">
+                <label style="display:block; font-size:0.75rem">Description</label>
+                <input id="name" type="text" placeholder="Rent, Salary, etc.">
+            </div>
+            <div class="flex-col">
+                <label style="display:block; font-size:0.75rem">Amount (₹)</label>
+                <input id="amount" type="number" placeholder="0.00">
+            </div>
+            <div class="flex-col">
+                <label style="display:block; font-size:0.75rem">Type</label>
+                <select id="type">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div class="flex-col">
+                <label style="display:block; font-size:0.75rem">Category</label>
+                <input id="category" type="text" placeholder="Food, Tech...">
+            </div>
+            <div class="flex-col">
+                <label style="display:block; font-size:0.75rem">Date</label>
+                <input id="date" type="date">
+            </div>
+            <button onclick="addTransaction()">Submit</button>
+        </div>
+    </div>
+
+    <div class="charts-container">
+        <div class="card">
+            <h4 style="margin:0 0 1rem 0">Cash Flow Trend</h4>
+            <div class="chart-box"><canvas id="lineChart"></canvas></div>
+        </div>
+        <div class="card">
+            <h4 style="margin:0 0 1rem 0">Expense Breakdown</h4>
+            <div class="chart-box"><canvas id="pieChart"></canvas></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem">
+            <h3 style="margin:0">History</h3>
+            <div style="display:flex; gap:0.5rem">
+                <input id="search" placeholder="Search..." oninput="stateManager.render()">
+                <select id="filterType" onchange="stateManager.render()">
+                    <option value="">All Types</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th>Status</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast">Operation Successful</div>
+
+<script src="script.js">
+</script>
+
+</body>
+</html>
